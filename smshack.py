@@ -10,6 +10,7 @@ import MySQLdb
 import time
 import subprocess
 import re
+import os
 
 class Database:
     host = 'localhost'
@@ -226,7 +227,7 @@ if __name__ == '__main__':
 	print "[*]Sniffer Loading..."
 	print "[*]Press Ctrl+C to Exit."
 	try:
-		child1 = subprocess.Popen(["/root/gsmhack/start_osmbb.sh"],stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+		child1 = subprocess.Popen(["/root/gsmhack/start_osmbb.sh"],stderr=open('/root/gsmhack/start.err','w'),stdout=open('/root/gsmhack/start.log','w'))
 		print "[+]Load PID: " + str(child1.pid)
 		print "[*]Plugin C118,Click the Button Please"
 		flag = raw_input("[!]Osmocom-BB Load Done?(Y/N)")
@@ -253,11 +254,10 @@ if __name__ == '__main__':
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		s.bind(('0.0.0.0', 4729))
 		sniffinfo = ["/root/osmocom-bb/src/host/layer23/src/misc/ccch_scan","-i","127.0.0.1","-a",scanarf]
-		child3 =  subprocess.Popen(sniffinfo,stderr=subprocess.PIPE,stdout=subprocess.PIPE)
+		child3 =  subprocess.Popen(sniffinfo,stderr=open('/root/gsmhack/sniff.err','w'),stdout=open('/root/gsmhack/sniff.log','w'))
 		print "[+]Load PID: " + str(child3.pid)
 		print "[*]%s Start Monitor." % GetCurrentTime()
 		print "[*]Enjoy GSM Sniffing!"
-		#print child3.communicate()
 		while True:
 			data, addr = s.recvfrom(2048)
 			#print data.encode('hex')
